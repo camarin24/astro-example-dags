@@ -27,3 +27,9 @@ with DAG(
     extract_load_op = PythonOperator(
         task_id="extract_and_load", python_callable=extract_and_load
     )
+
+    extract_load_op_two = PythonOperator(
+        task_id="extract_and_load_two", python_callable=extract_and_load
+    )
+
+    extract_load_op >> extract_load_op_two
