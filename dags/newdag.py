@@ -1,5 +1,6 @@
 from airflow.providers.amazon.aws.operators.s3 import S3FileTransformOperator
 from airflow import DAG
+from airflow.operators.python import PythonOperator
 from airflow.models.connection import Connection
 from time import time_ns
 from datetime import datetime
@@ -16,7 +17,13 @@ with DAG(
     is_paused_upon_creation=False,
     catchup=False,
 ) as dag:
-    pd.DataFrame({"A": [1, 2, 3]})
-    print(pd)
 
-    print("Modificación solo del dalg")
+    def extract_and_load():
+        pd.DataFrame({"A": [1, 2, 3]})
+        print(pd)
+
+        print("Modificación solo del dalg")
+
+    extract_load_op = PythonOperator(
+        task_id="extract_and_load", python_callable=extract_and_load
+    )
